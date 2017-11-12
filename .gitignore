@@ -259,3 +259,6 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/Adescom CTM Billings/libwkhtmltox.dll
+/Adescom CTM Billings/libwkhtmltox.dylib
+/Adescom CTM Billings/libwkhtmltox.so
