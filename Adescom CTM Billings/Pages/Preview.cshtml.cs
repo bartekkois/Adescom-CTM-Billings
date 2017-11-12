@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Adescom_CTM_Billings.Pages
 {
-    public class AboutModel : PageModel
+    public class PreviewModel : PageModel
     {
         public string Message { get; set; }
 
