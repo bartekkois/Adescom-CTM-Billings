@@ -7,4 +7,4 @@ Adescom CTM Billings is an ASP.NET Core Razor Pages web application intended for
 The Adescom CTM Billings documentation is avaible at [Adescom-CTM-Billings Wiki](https://github.com/bartekkois/Adescom-CTM-Billings/wiki/Home)
 
 ## License
-This software is distributed under the BSD License (see [LICENSE](https://github.com/bartekkois/Adescom-CTM-Billings/blob/master/LICENSE) file).
+This software is distributed under the BSD License (see [LICENSE](https://github.com/bartekkois/Adescom-CTM-Billings/blob/master/LICENSE.txt) file).
