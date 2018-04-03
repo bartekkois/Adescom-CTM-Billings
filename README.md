@@ -1,6 +1,6 @@
 # Adescom CTM Billings
 ## What is Adescom CTM Billings
-Adescom CTM Billings is an ASP.NET Core Razor Pages web application intended for downloading billings through SOAP interface from 
+Adescom CTM Billings is an ASP.NET Core Razor Pages web application intended for downloading billings through SOAP interface from Adescom CTM IP PBX.
 ![Adescom CTM Billings home page](https://raw.githubusercontent.com/bartekkois/Adescom-CTM-Billings/master/screenshot.jpg)
 
 ## Documentation
