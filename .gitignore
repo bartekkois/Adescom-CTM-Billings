@@ -262,3 +262,6 @@ __pycache__/
 /Adescom CTM Billings/libwkhtmltox.dll
 /Adescom CTM Billings/libwkhtmltox.dylib
 /Adescom CTM Billings/libwkhtmltox.so
+
+# Temporary export directory
+/Adescom CTM Billings/Temp/*.*

@@ -1,3 +1,4 @@
+using Adescom_CTM_Billings.Services;
 using DinkToPdf;
 using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Builder;
@@ -34,6 +35,7 @@ namespace Adescom_CTM_Billings
         {
             services.AddMvc();
             services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+            services.AddSingleton<IExportService, ExportService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
