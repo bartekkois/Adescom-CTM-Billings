@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using System.Reflection;
+@{ 
+    var ApplicationVersion = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion; 
+}
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -37,7 +42,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; 2018 - Adescom CTM Billings</p>
+            <p>&copy; 2018 - Adescom CTM Billings - ver. @ApplicationVersion</p>
         </footer>
     </div>
 
@@ -60,7 +65,7 @@
                 crossorigin="anonymous"
                 integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
         </script>
-        <script  src="~/lib/file-saver/FileSaver.min.js" asp-append-version="true"></script>
+        <script src="~/lib/file-saver/FileSaver.min.js" asp-append-version="true"></script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 
