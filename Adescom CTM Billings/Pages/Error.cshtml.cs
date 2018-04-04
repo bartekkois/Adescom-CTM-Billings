@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Adescom_CTM_Billings.Pages
+namespace WebApplication1.Pages
 {
     public class ErrorModel : PageModel
     {
