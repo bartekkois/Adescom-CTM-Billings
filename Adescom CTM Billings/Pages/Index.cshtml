@@ -10,63 +10,71 @@
         @Model.ExceptionMessage
     </div>
 }
-
-<div class="row">
-    <div class="col-sm-4">
-        <h3>Abonenci</h3>
+else if ((Model.Clients == null) || (!Model.Clients.Any()))
+{
+    <div class="alert alert-dismissible alert-danger">
+        Błąd wyświetlania widoku abonentów
     </div>
-</div>
+}
+else
+{
+    <div class="row">
+        <div class="col-sm-4">
+            <h3>Abonenci</h3>
+        </div>
+    </div>
 
-<table class="table table-striped table-hover table-condensed">
-    <tbody>
-        @foreach (Client client in Model.Clients)
+    <table class="table table-striped table-hover table-condensed">
+        <tbody>
+            @foreach (Client client in Model.Clients)
+            {
+                <tr>
+                    <td class="text-right col-sm-2"><a class="btn btn-info btn-xs" title="Podgląd połączeń" asp-page="/Preview" asp-route-id="@client.Id"><i class="glyphicon glyphicon-search"></i>&nbsp;Podgląd</a></td>
+                    <td class="text-left col-sm-10">@client.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <h3>Zbiorcze pobieranie billingów</h3>
+        </div>
+    </div>
+
+    <div class="form-inline">
+        <div class="row">
+            <div class="col-sm-4 form-group"></div>
+            <div class="col-sm-2 form-group">
+                <label class="control-label description-text">Zakres danych: </label>
+            </div>
+            <div class="col-sm-6 form-group text-right">
+                <input class="form-control" id="start-date-input" type="datetime-local" step="1" asp-for="@Model.StartDate">
+                <label class="control-label description-text"> - </label>
+                <input class="form-control" id="end-date-input" type="datetime-local" step="1" asp-for="@Model.EndDate">
+                <input id="request-verification-token" type="hidden" value="@Xsrf.GetAndStoreTokens(this.HttpContext).RequestToken">
+            </div>
+        </div>
+        <div class="form-group">&nbsp;</div>
+        <div class="row">
+            <div class="col-sm-4 form-group"></div>
+            <div class="col-sm-5 form-group">
+                <label class="control-label description-text">Status pobierania: </label>
+                <label class="control-label description-text" id="get-billings-status">brak</label>
+            </div>
+            <div class="col-sm-3 form-group text-right">
+                <button class="btn btn-success" id="get-billings-button"><i class="glyphicon glyphicon-download-alt" id="get-billings-button-icon"></i> <span id="get-billings-button-text">Pobierz billingi zbiorczo</span></button>
+            </div>
+        </div>
+        <div class="form-group">&nbsp;</div>
+    </div>
+
+    @section scripts
         {
-            <tr>
-                <td class="text-right col-sm-2"><a class="btn btn-info btn-xs" title="Podgląd połączeń" asp-page="/Preview" asp-route-id="@client.Id"><i class="glyphicon glyphicon-search"></i>&nbsp;Podgląd</a></td>
-                <td class="text-left col-sm-10">@client.Name</td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-<div class="row">
-    <div class="col-sm-4">
-        <h3>Zbiorcze pobieranie billingów</h3>
-    </div>
-</div>
-
-<div class="form-inline">
-    <div class="row">
-        <div class="col-sm-4 form-group"></div>
-        <div class="col-sm-2 form-group">
-            <label class="control-label description-text">Zakres danych: </label>
-        </div>
-        <div class="col-sm-6 form-group text-right">
-            <input class="form-control" id="start-date-input" type="datetime-local" step="1" asp-for="@Model.StartDate">
-            <label class="control-label description-text"> - </label>
-            <input class="form-control" id="end-date-input" type="datetime-local" step="1" asp-for="@Model.EndDate">
-            <input id="request-verification-token" type="hidden" value="@Xsrf.GetAndStoreTokens(this.HttpContext).RequestToken">
-        </div>
-    </div>
-    <div class="form-group">&nbsp;</div>
-    <div class="row">
-        <div class="col-sm-4 form-group"></div>
-        <div class="col-sm-5 form-group">
-            <label class="control-label description-text">Status pobierania: </label>
-            <label class="control-label description-text" id="get-billings-status">brak</label>
-        </div>
-        <div class="col-sm-3 form-group text-right">
-            <button class="btn btn-success" id="get-billings-button"><i class="glyphicon glyphicon-download-alt" id="get-billings-button-icon"></i> <span id="get-billings-button-text">Pobierz billingi zbiorczo</span></button>
-        </div>
-    </div>
-    <div class="form-group">&nbsp;</div>
-</div>
-
-@section scripts
-    {
-    <script>
-        $(document).ready(function () {
-            BillingsController.init();
-        });
-    </script>
+        <script>
+            $(document).ready(function () {
+                BillingsController.init();
+            });
+        </script>
+    }
 }

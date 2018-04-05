@@ -10,58 +10,67 @@
         @Model.ExceptionMessage
     </div>
 }
-
-<div class="row">
-    <div class="col-sm-4">
-        <h3>Podgląd rozmów</h3>
+else if ((Model.ClientBilling == null) || (!Model.ClientBilling.BillingRecords.Any()))
+{
+    <div class="alert alert-dismissible alert-danger">
+        Błąd wyświetlania widoku podglądu
     </div>
-    <div class="col-sm-8 text-right">
-        <a class="btn btn-primary" href="./Index" role="button"><i class="glyphicon glyphicon-arrow-left"></i>&nbsp;&nbsp;&nbsp;&nbsp;Powrót</a>
+}
+else
+{
+    <div class="row">
+        <div class="col-sm-4">
+            <h3>Podgląd rozmów</h3>
+        </div>
+        <div class="col-sm-8 text-right">
+            <a class="btn btn-primary" href="./Index" role="button"><i class="glyphicon glyphicon-arrow-left"></i>&nbsp;&nbsp;&nbsp;&nbsp;Powrót</a>
+        </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="col-sm-8 description-text">
-        @{
-            string clids = "";
-            foreach (string clid in Utils.RangifyLiteralValues(Model.ClientBilling.Client.LiteralShortClids()))
-            {
-                clids += clid;
-                if (!clid.Equals(Utils.RangifyLiteralValues(Model.ClientBilling.Client.LiteralShortClids()).Last()))
+    <div class="row">
+        <div class="col-sm-8 description-text">
+            @{
+                string clids = "";
+                double _priceNettoSum = 0;
+
+                foreach (string clid in Utils.RangifyLiteralValues(Model.ClientBilling.Client.LiteralShortClids()))
                 {
-                    clids += ",";
+                    clids += clid;
+                    if (!clid.Equals(Utils.RangifyLiteralValues(Model.ClientBilling.Client.LiteralShortClids()).Last()))
+                    {
+                        clids += ",";
+                    }
+                }
+
+                foreach (BillingRecord billingRecord in Model.ClientBilling.BillingRecords)
+                {
+                    _priceNettoSum = _priceNettoSum + billingRecord.Price;
                 }
             }
 
-            double _priceNettoSum = 0;
-            foreach (BillingRecord billingRecord in Model.ClientBilling.BillingRecords)
-            {
-                _priceNettoSum = _priceNettoSum + billingRecord.Price;
-            }
-        }
+            Podgląd rozmów abonenta <B>@Model.ClientBilling.Client.Name</B> <BR>
+            dla numeracji <B>@clids</B><BR>
+            za okres od <B>@Model.ClientBilling.StartDate.ToString()</B> do <B>@Model.ClientBilling.EndDate.ToString()</B><BR>
+            Koszt: netto <B>@Math.Round(_priceNettoSum, 2).ToString("0.00")</B> zł, vat <B>@Math.Round(_priceNettoSum * 0.23, 2).ToString("0.00")</B> zł, brutto <B>@Math.Round(_priceNettoSum * 1.23, 2).ToString("0.00")</B> zł < BR >
 
-        Podgląd rozmów abonenta <B>@Model.ClientBilling.Client.Name</B> <BR>
-        dla numeracji <B>@clids</B><BR>
-        za okres od <B>@Model.ClientBilling.StartDate.ToString()</B> do <B>@Model.ClientBilling.EndDate.ToString()</B><BR>
-        Koszt: netto <B>@Math.Round(_priceNettoSum, 2).ToString("0.00")</B> zł, vat <B>@Math.Round(_priceNettoSum * 0.23, 2).ToString("0.00")</B> zł, brutto <B>@Math.Round(_priceNettoSum * 1.23, 2).ToString("0.00")</B> zł<BR>
+        </div>
+        <div class="col-sm-4 text-right datetime-scope">
+        </div>
     </div>
-    <div class="col-sm-4 text-right datetime-scope">
-    </div>
-</div>
 
-<div class="form-group">&nbsp;</div>
+    <div class="form-group">&nbsp;</div>
 
-<table class="table table-striped table-hover table-condensed">
-    <thead class="thead-dark">
-        <tr>
-            <th class="text-center description-text">Lp.</th>
-            <th class="text-center description-text">Data i godzina</th>
-            <th class="text-center description-text">Numer docelowy</th>
-            <th class="text-center description-text">Czas trwania (min:s)</th>
-            <th class="text-center description-text">Wartość netto (PLN)</th>
-        </tr>
-    </thead>
-    <tbody>
+    <table class="table table-striped table-hover table-condensed">
+        <thead class="thead-dark">
+            <tr>
+                <th class="text-center description-text">Lp.</th>
+                <th class="text-center description-text">Data i godzina</th>
+                <th class="text-center description-text">Numer docelowy</th>
+                <th class="text-center description-text">Czas trwania (min:s)</th>
+                <th class="text-center description-text">Wartość netto (PLN)</th>
+            </tr>
+        </thead>
+        <tbody>
         @foreach (var (index, billingRecord) in Model.ClientBilling.BillingRecords.Enumerate())
         {
             <tr>
@@ -72,23 +81,24 @@
                 <td class="text-center">@Math.Round(billingRecord.Price, 2).ToString("0.00")</td>
             </tr>
         }
-    </tbody>
-</table>
+        </tbody>
+    </table>
 
-<form class="form-inline" method="post">
-    <div class="form-group">&nbsp;</div>
-    <div class="row">
-        <div class="col-sm-3 form-group"></div>
-        <div class="col-sm-7 form-group text-right">
-            <label class="control-label description-text">Zakres danych: </label>
-            <input class="form-control" type="datetime-local" step="1" asp-for="@Model.StartDate">
-            <label class="control-label description-text"> - </label>
-            <input class="form-control" type="datetime-local" step="1" asp-for="@Model.EndDate">
-            <input class="form-control hidden" type="number" asp-for="@Model.ClientId">
+    <form class="form-inline" method="post">
+        <div class="form-group">&nbsp;</div>
+        <div class="row">
+            <div class="col-sm-3 form-group"></div>
+            <div class="col-sm-7 form-group text-right">
+                <label class="control-label description-text">Zakres danych: </label>
+                <input class="form-control" type="datetime-local" step="1" asp-for="@Model.StartDate">
+                <label class="control-label description-text"> - </label>
+                <input class="form-control" type="datetime-local" step="1" asp-for="@Model.EndDate">
+                <input class="form-control hidden" type="number" asp-for="@Model.ClientId">
+            </div>
+            <div class="col-sm-2 form-group text-right">
+                <button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-refresh"></i>&nbsp;Odśwież</button>
+            </div>
         </div>
-        <div class="col-sm-2 form-group text-right">
-            <button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-refresh"></i>&nbsp;Odśwież</button>
-        </div>
-    </div>
-    <div class="form-group">&nbsp;</div>
-</form>
+        <div class="form-group">&nbsp;</div>
+    </form>
+}
