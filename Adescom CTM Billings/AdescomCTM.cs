@@ -169,28 +169,35 @@ namespace Adescom_CTM_Billings
 
         private async void GetBillingForClient(DateTime fromDate, DateTime toDate, Client client, AdescomCTMSoapWrapper atmanCTMWithoutProxyClassesClient, BillingQueryOptions billingQueryOptions, ConcurrentBag<ClientBilling> clientsBillings)
         {
-            List<BillingRecord> billingRecords = new List<BillingRecord>();
-            BillingRecordsArrayEx billingRecordsArrayEx = atmanCTMWithoutProxyClassesClient.GetBillingForClientAsync(client.Id, fromDate, toDate).Result;
-
-            if (billingRecordsArrayEx != null && billingRecordsArrayEx.totalCount > 0)
+            try
             {
-                foreach (BillingRecordEx billingRecordEx in billingRecordsArrayEx.items)
+                List<BillingRecord> billingRecords = new List<BillingRecord>();
+                BillingRecordsArrayEx billingRecordsArrayEx = atmanCTMWithoutProxyClassesClient.GetBillingForClientAsync(client.Id, fromDate, toDate).Result;
+
+                if (billingRecordsArrayEx != null && billingRecordsArrayEx.totalCount > 0)
                 {
-                    double price = 0;
-                    double priceInclTaxes = 0;
+                    foreach (BillingRecordEx billingRecordEx in billingRecordsArrayEx.items)
+                    {
+                        double price = 0;
+                        double priceInclTaxes = 0;
 
-                    if (billingRecordEx.price.HasValue)
-                        price = billingRecordEx.price.Value;
+                        if (billingRecordEx.price.HasValue)
+                            price = billingRecordEx.price.Value;
 
-                    if (billingRecordEx.priceInclTaxes.HasValue)
-                        priceInclTaxes = billingRecordEx.priceInclTaxes.Value;
+                        if (billingRecordEx.priceInclTaxes.HasValue)
+                            priceInclTaxes = billingRecordEx.priceInclTaxes.Value;
 
-                    billingRecords.Add(new BillingRecord(billingRecordEx.startDate, billingRecordEx.source, billingRecordEx.destination, billingRecordEx.duration, price));
+                        billingRecords.Add(new BillingRecord(billingRecordEx.startDate, billingRecordEx.source, Utils.RemoveCountryCodeFromTelephoneNumber(
+                            _configuration.GetValue<string>("ApplicationSettings:CountryCode"), 
+                            _configuration.GetValue<int>("ApplicationSettings:NumberOfDigitsForAreaAndShortCLID"), 
+                            billingRecordEx.destination), 
+                            billingRecordEx.duration, 
+                            price));
+                    }
                 }
-            }
 
-            // Billing records filtering by destination
-            List<string> destinationFilter = new List<string>() {
+                // Billing records filtering by destination
+                List<string> destinationFilter = new List<string>() {
                 "SUBSCRIBE",
                 "CENTREX",
                 "HUNT-GROUP",
@@ -220,11 +227,16 @@ namespace Adescom_CTM_Billings
                 "CLIENT_SUBSCRIBE_SPECIAL_8",
                 "CLIENT_SUBSCRIBE_SPECIAL_9",
                 "CLIENT_SUBSCRIBE_SPECIAL_10"
-            };
+                };
 
-            clientsBillings.Add(new ClientBilling(client, fromDate, toDate, billingRecords.
-                Where(r => !((r.Price == 0) && (destinationFilter.Contains(r.Destination))))
-                .ToList()));
+                clientsBillings.Add(new ClientBilling(client, fromDate, toDate, billingRecords.
+                    Where(r => !((r.Price == 0) && (destinationFilter.Contains(r.Destination))))
+                    .ToList()));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -24,6 +25,17 @@ namespace Adescom_CTM_Billings
 
             Regex regex = new Regex(string.Format("[{0}]", Regex.Escape(new string(_invalidFileNameChars.ToArray()))));
             return regex.Replace(inputFilename, "");
+        }
+
+        public static string RemoveCountryCodeFromTelephoneNumber(string countryCode, int numberOfDigits, string telephoneNumber)
+        {
+            if (!Regex.IsMatch(countryCode, @"^\d{1,4}"))
+                throw new Exception("Błędny kod kraju");
+
+            if (numberOfDigits <= 0)
+                throw new Exception("Błędna liczba cyfr");
+
+            return Regex.Replace(telephoneNumber, @"^(" + countryCode + @")(\d{" + numberOfDigits.ToString() + @"})$", "$2");
         }
 
         public static IEnumerable<string> RangifyLiteralValues(IList<string> literalValues)

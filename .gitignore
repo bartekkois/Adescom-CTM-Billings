@@ -265,3 +265,5 @@ __pycache__/
 
 # Temporary export directory
 /Adescom CTM Billings/Temp/*.*
+/Adescom CTM Billings/Temp/PDF/*.*
+/Adescom CTM Billings/Temp/ZIP/*.*
