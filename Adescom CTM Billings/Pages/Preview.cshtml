@@ -10,7 +10,7 @@
         @Model.ExceptionMessage
     </div>
 }
-else if ((Model.ClientBilling == null) || (!Model.ClientBilling.BillingRecords.Any()))
+else if (Model.ClientBilling == null)
 {
     <div class="alert alert-dismissible alert-danger">
         Błąd wyświetlania widoku podglądu
