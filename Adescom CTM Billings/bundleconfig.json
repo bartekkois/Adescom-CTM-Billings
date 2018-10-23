@@ -18,14 +18,14 @@
   {
     "outputFileName": "wwwroot/js/site.js",
     "inputFiles": [
-      "wwwroot/js/services/BillingsService.js",
+      "wwwroot/js/Services/BillingsService.js",
       "wwwroot/js/Controllers/BillingsController.js"
     ]
   },
   {
-    "outputFileName": "wwwroot/lib/file-saver/src/FileSaver.min.js",
+    "outputFileName": "wwwroot/lib/file-saver/FileSaver.min.js",
     "inputFiles": [
-      "wwwroot/lib/file-saver/src/FileSaver.js"
+      "wwwroot/lib/file-saver/FileSaver.js"
     ]
   }
 ]
