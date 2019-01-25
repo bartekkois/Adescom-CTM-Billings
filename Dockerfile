@@ -14,6 +14,17 @@ FROM build AS publish
 RUN dotnet publish "${CSPROJFILE}" -c Release -o /app
 
 FROM base AS final
+RUN apt-get update && apt-get install -y \
+    libgdiplus \
+    xvfb \
+    libfontconfig \
+    wkhtmltopdf \
+    libc6-dev \
+    openssl \
+    libssl1.0-dev \
+    wget \
+    && apt-get clean
+RUN wget --quiet https://github.com/rdvojmoc/DinkToPdf/raw/master/v0.12.4/64%20bit/libwkhtmltox.so -O /app/libwkhtmltox.so
 WORKDIR /app
 COPY --from=publish /app .
 ENTRYPOINT ["dotnet", "Adescom CTM Billings.dll"]

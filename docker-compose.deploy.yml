@@ -1,11 +1,10 @@
 version: '3.5'
 
 services:
-  gponmonitor:
+  adescomctmbillings:
     image: bartekkois/adescomctmbillings:1.0.1
     restart: always
     volumes:
       - /docker/AdescomCTMBillings/appsettings.json:/app/appsettings.json:ro
-      - /docker/AdescomCTMBillings/libwkhtmltox.so:/app/libwkhtmltox.so:ro
     ports:
       - "5001:80"
