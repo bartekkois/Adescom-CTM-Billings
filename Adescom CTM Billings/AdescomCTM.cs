@@ -197,40 +197,8 @@ namespace Adescom_CTM_Billings
                 }
 
                 // Billing records filtering by destination
-                List<string> destinationFilter = new List<string>() {
-                "SUBSCRIBE",
-                "CENTREX",
-                "HUNT-GROUP",
-                "FAX2WEB_SENT",
-                "WEB2FAX_RECEIVED",
-                "DEFAULT_FAX2WEB",
-                "CLIENT_SUBSCRIBE",
-                "CLIENT_TRUNK",
-                "CLIENT_TRUNK_GAP",
-                "CLIENT_TRUNK_SUBSCRIBE",
-                "CLID_F2WALLOWED",
-                "CLID_CFU",
-                "CLID_CLIP",
-                "CLID_FORWARDING",
-                "CLID_ATXFERALLOWED",
-                "CLID_BLINDXFERALLOWED",
-                "RECORDINGS_STORAGE_UNLIMITED_MON",
-                "MASS_DIAL_CONNECTION_SLOT",
-                "CLIENT_SUBSCRIBE_SPECIAL",
-                "CLIENT_SUBSCRIBE_SPECIAL_1",
-                "CLIENT_SUBSCRIBE_SPECIAL_2",
-                "CLIENT_SUBSCRIBE_SPECIAL_3",
-                "CLIENT_SUBSCRIBE_SPECIAL_4",
-                "CLIENT_SUBSCRIBE_SPECIAL_5",
-                "CLIENT_SUBSCRIBE_SPECIAL_6",
-                "CLIENT_SUBSCRIBE_SPECIAL_7",
-                "CLIENT_SUBSCRIBE_SPECIAL_8",
-                "CLIENT_SUBSCRIBE_SPECIAL_9",
-                "CLIENT_SUBSCRIBE_SPECIAL_10"
-                };
-
                 clientsBillings.Add(new ClientBilling(client, fromDate, toDate, billingRecords.
-                    Where(r => !((r.Price == 0) && (destinationFilter.Contains(r.Destination))))
+                    Where(r => ((r.Price != 0) && !(r.Destination.Any(n => char.IsLetter(n)))))
                     .ToList()));
             }
             catch (Exception ex)
