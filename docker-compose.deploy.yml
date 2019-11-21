@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
   adescomctmbillings:
-    image: bartekkois/adescomctmbillings:1.0.1
+    image: bartekkois/adescomctmbillings:1.0.2
     restart: always
     volumes:
       - /docker/AdescomCTMBillings/appsettings.json:/app/appsettings.json:ro
