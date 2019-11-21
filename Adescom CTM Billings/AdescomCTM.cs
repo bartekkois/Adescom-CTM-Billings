@@ -96,14 +96,14 @@ namespace Adescom_CTM_Billings
             clidDetailsArray clidDetailsArray = atmanCTMWithoutProxyClassesClient.GetCLIDsForClientAsync(client.clientID).Result;
             if (clidDetailsArray != null && clidDetailsArray.count > 0)
                 foreach (var clid in clidDetailsArray.clids)
-                    if (clid.active)
+                    if (clid.active && !clid.deleted)
                         clids.Add(new Clid(clid.number.countryCode, clid.number.areaCode, clid.number.shortCLID));
 
             // Get trunk groups CLIDs
             TrunkgroupsArray trunkgroupsArray = atmanCTMWithoutProxyClassesClient.GetTrunkGroupsForClientAsync(client.clientID).Result;
             if (trunkgroupsArray != null && trunkgroupsArray.count > 0)
                 foreach (var trunk in trunkgroupsArray.items)
-                    if (trunk.active)
+                    if (trunk.active && !trunk.deleted)
                         foreach (var clid in trunk.numbers.items)
                             clids.Add(new Clid(clid.countryCode, clid.areaCode, clid.shortCLID));
 
