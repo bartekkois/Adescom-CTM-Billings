@@ -180,7 +180,7 @@ namespace Adescom_CTM_Billings.Services
             {
                 clids += clid;
                 if (!clid.Equals(Utils.RangifyLiteralValues(clientBilling.Client.LiteralShortClids()).Last()))
-                    clids += ",";
+                    clids += ", ";
             }
 
             _htmlClientBilling.Replace("[CLIENT]", clientBilling.Client.Name);
@@ -256,7 +256,7 @@ namespace Adescom_CTM_Billings.Services
                 {
                     _clids += clid;
                     if (!clid.Equals(Utils.RangifyLiteralValues(clientBilling.Client.LiteralShortClids()).Last()))
-                        _clids += ",";
+                        _clids += ", ";
                 }
 
                 double _priceNettoSum = 0;
