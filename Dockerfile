@@ -1,8 +1,8 @@
-FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine AS base
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /
 ENV CSPROJFILE "src/Adescom CTM Billings/Adescom CTM Billings.csproj"
 COPY ["Adescom CTM Billings/*.csproj", "./src/Adescom CTM Billings/"]
@@ -21,7 +21,6 @@ RUN apt-get update && apt-get install -y \
     wkhtmltopdf \
     libc6-dev \
     openssl \
-    libssl1.0-dev \
     wget \
 	locales \
     && apt-get clean
