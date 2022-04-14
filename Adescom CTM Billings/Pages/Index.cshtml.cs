@@ -27,10 +27,10 @@ namespace Adescom_CTM_Billings.Pages
         public string ExceptionMessage { get; set; }
 
         private IConfiguration _configuration { get; set; }
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly IExportService _exportService;
 
-        public IndexModel(IConfiguration configuration, IExportService exportService, IHostingEnvironment hostingEnvironment)
+        public IndexModel(IConfiguration configuration, IExportService exportService, IWebHostEnvironment hostingEnvironment)
         {
             _configuration = configuration;
             _exportService = exportService;
