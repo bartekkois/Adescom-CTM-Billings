@@ -35,8 +35,9 @@ namespace Adescom_CTM_Billings
 		                            <q1:getClients xmlns:q1=""http://www.example.org/ResellerAPI/"">
 			                            <params href=""#id1""/>
 		                            </q1:getClients>
-		                            <q2:clientSearchParams id=""id1"" xsi:type=""q2:clientSearchParams"" xmlns:q2=""http://www.example.org/ResellerAPI/"">
+		                            <q2:clientSearchParams id=""id1"" xsi:type=""q2:clientSearchParamse"" xmlns:q2=""http://www.example.org/ResellerAPI/"">
 			                            <resellerID xsi:type=""xsd:int"">0</resellerID>
+			                            <deleted xsi:type=""xsd:boolean"">false</deleted>
 		                            </q2:clientSearchParams>
 	                            </s:Body>
                             </s:Envelope>";
