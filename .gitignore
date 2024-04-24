@@ -267,3 +267,5 @@ __pycache__/
 /Adescom CTM Billings/Temp/*.*
 /Adescom CTM Billings/Temp/PDF/*.*
 /Adescom CTM Billings/Temp/ZIP/*.*
+/Adescom CTM Billings/libwkhtmltox.dylib
+/Adescom CTM Billings/libwkhtmltox.so
