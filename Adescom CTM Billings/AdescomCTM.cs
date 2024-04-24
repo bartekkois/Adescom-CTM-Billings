@@ -62,14 +62,27 @@ namespace Adescom_CTM_Billings
                 else
                     clientDetailsFiltered = clientDetailsArray.clients.ToList();
 
+                await atmanCTMWithoutProxyClassesClient.LogoutAsync(sessionId);
+
                 if (includeCLIDs)
                 {
                     if (clientDetailsArray != null && clientDetailsArray.count > 0)
                     {
-                        Parallel.ForEach(clientDetailsFiltered, new ParallelOptions { MaxDegreeOfParallelism = 1 }, (client) =>
+                        for (int i = 0; i < clientDetailsFiltered.Count; i = i + _configuration.GetValue<int>("WebServiceConnectionSettings:MaxSessions"))
                         {
-                            GetCLIDsForClient(client, atmanCTMWithoutProxyClassesClient, clients);
-                        });
+                            sessionId = await atmanCTMWithoutProxyClassesClient.LoginAsync(
+                            _configuration.GetValue<string>("WebServiceConnectionSettings:ResellerLogin"),
+                            _configuration.GetValue<string>("WebServiceConnectionSettings:ResellerPassword"),
+                            _configuration.GetValue<int>("WebServiceConnectionSettings:SessionTimeout"));
+
+                            Parallel.ForEach(clientDetailsFiltered.Skip(i).Take(_configuration.GetValue<int>("WebServiceConnectionSettings:MaxSessions")), new ParallelOptions { MaxDegreeOfParallelism = _configuration.GetValue<int>("WebServiceConnectionSettings:MaxSessions") }, (client) =>
+                            {
+                                GetCLIDsForClient(client, atmanCTMWithoutProxyClassesClient, clients);
+                                System.Diagnostics.Debug.WriteLine("Getting CLIDs for: " + client.clientID + " - " + client.billingDetails.name);
+                            });
+
+                            await atmanCTMWithoutProxyClassesClient.LogoutAsync(sessionId);
+                        }
                     }
                 }
                 else
@@ -78,7 +91,7 @@ namespace Adescom_CTM_Billings
                         clients.Add(new Client(clientDetails.clientID, clientDetails.billingDetails.name, new List<Clid>() { }));
                 }
 
-                await atmanCTMWithoutProxyClassesClient.LogoutAsync(sessionId);
+
                 return clients.ToList();
             }
             catch (AggregateException ex)
@@ -148,17 +161,22 @@ namespace Adescom_CTM_Billings
 
                 ConcurrentBag<ClientBilling> clientsBillings = new ConcurrentBag<ClientBilling>();
 
-                sessionId = await atmanCTMWithoutProxyClassesClient.LoginAsync(
-                    _configuration.GetValue<string>("WebServiceConnectionSettings:ResellerLogin"), 
-                    _configuration.GetValue<string>("WebServiceConnectionSettings:ResellerPassword"), 
+                for (int i = 0; i < clients.Count; i = i + _configuration.GetValue<int>("WebServiceConnectionSettings:MaxSessions"))
+                {
+                    sessionId = await atmanCTMWithoutProxyClassesClient.LoginAsync(
+                    _configuration.GetValue<string>("WebServiceConnectionSettings:ResellerLogin"),
+                    _configuration.GetValue<string>("WebServiceConnectionSettings:ResellerPassword"),
                     _configuration.GetValue<int>("WebServiceConnectionSettings:SessionTimeout"));
 
-                Parallel.ForEach(clients, new ParallelOptions { MaxDegreeOfParallelism = 20 }, (client) =>
-                {
-                    GetBillingForClient(startDate, endDate, client, atmanCTMWithoutProxyClassesClient, billingQueryOptions, clientsBillings);
-                });
+                    Parallel.ForEach(clients.Skip(i).Take(_configuration.GetValue<int>("WebServiceConnectionSettings:MaxSessions")), new ParallelOptions { MaxDegreeOfParallelism = _configuration.GetValue<int>("WebServiceConnectionSettings:MaxSessions") }, (client) =>
+                    {
+                        GetBillingForClient(startDate, endDate, client, atmanCTMWithoutProxyClassesClient, billingQueryOptions, clientsBillings);
+                        System.Diagnostics.Debug.WriteLine("Getting billings for: " + client.Id + " - " + client.Name);
+                    });
 
-                await atmanCTMWithoutProxyClassesClient.LogoutAsync(sessionId);
+                    await atmanCTMWithoutProxyClassesClient.LogoutAsync(sessionId);
+                }
+
                 return clientsBillings.ToList();
             }
             catch (AggregateException ex)
