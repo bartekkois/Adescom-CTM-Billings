@@ -91,7 +91,13 @@ namespace Adescom_CTM_Billings
         public AdescomCTMSoapWrapper(IConfiguration configuration)
         {
             _configuration = configuration;
-            _httpClient = new HttpClient();
+            _httpClient = new HttpClient(new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (request, cert, chain, errors) =>
+                {
+                    return true;
+                }
+            });
             _webServiceUri = new Uri(_configuration.GetValue<string>("WebServiceConnectionSettings:Url"));
         }
 
