@@ -7,5 +7,6 @@ services:
     volumes:
       - /docker/AdescomCTMBillings/appsettings.json:/app/appsettings.json:ro
       - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
     ports:
       - "5001:80"

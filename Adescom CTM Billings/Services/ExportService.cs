@@ -166,7 +166,7 @@ namespace Adescom_CTM_Billings.Services
             {
                 StringBuilder _htmlBillingRecord = new StringBuilder(_htmlTemplateBody);
                 _htmlBillingRecord.Replace("[NO]", (index + 1).ToString());
-                _htmlBillingRecord.Replace("[START_DATE]", billingRecord.StartDate.ToString());
+                _htmlBillingRecord.Replace("[START_DATE]", billingRecord.StartDate.ToLocalTime().ToString());
                 _htmlBillingRecord.Replace("[DESTINATION]", billingRecord.Destination.ToString());
                 _htmlBillingRecord.Replace("[DURATION]", billingRecord.Duration.ToMinutesAndSeconds().ToString());
                 _htmlBillingRecord.Replace("[PRICE_NETTO]", Math.Round(billingRecord.Price, 2).ToString("0.00"));
