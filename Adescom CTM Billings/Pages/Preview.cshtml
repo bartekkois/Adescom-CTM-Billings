@@ -75,7 +75,7 @@ else
         {
             <tr>
                 <td class="text-center">@(index + 1)</td>
-                <td class="text-center">@billingRecord.StartDate.ToString()</td>
+                <td class="text-center">@billingRecord.StartDate.ToLocalTime().ToString()</td>
                 <td class="text-center">@billingRecord.Destination</td>
                 <td class="text-center">@billingRecord.Duration.ToMinutesAndSeconds()</td>
                 <td class="text-center">@Math.Round(billingRecord.Price, 2).ToString("0.00")</td>
